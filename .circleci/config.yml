@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: 'docker:stable-git'
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker images
+          command: 'docker build -t exploit90/docker-ce-git-aws:17.12 ./17.12'
+      - run:
+          name: Push Docker images
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker tag exploit90/docker-ce-git-aws:17.12 exploit90/docker-ce-git-aws:latest
+            docker push exploit90/docker-ce-git-aws:17.12
+            docker push exploit90/docker-ce-git-aws:latest
